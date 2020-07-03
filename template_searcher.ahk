@@ -165,28 +165,23 @@ sendImage(img, winid)
 
     ; Make discord the active window
     WinActivate, Discord
-    WinWaitActive, Discord, , 1
 
-    ; If winwaitactive does not time out (after 1 second)
-    if (!ErrorLevel) 
-    {
-        ; Copy the image to the clipboard
-        Gdip_SetBitmapToClipboard(pBitmap := Gdip_CreateBitmapFromFile(img))
-        Gdip_DisposeImage(pBitmap)
-            
-        ; Paste image and send
-        Send, ^v{ENTER}
-        Sleep, 100
+    ; Copy the image to the clipboard
+    Gdip_SetBitmapToClipboard(pBitmap := Gdip_CreateBitmapFromFile(img))
+    Gdip_DisposeImage(pBitmap)
+        
+    ; Paste image and send
+    Send, ^v{ENTER}
+    Sleep, 100
 
-        ; Restore the original clipboard
-        Clipboard := clip
+    ; Restore the original clipboard
+    Clipboard := clip
 
-        ; Free the memory in case the clipboard was very large.
-        clip := ""
+    ; Free the memory in case the clipboard was very large.
+    clip := ""
 
-        ; Activate the original window
-        WinActivate ahk_id %winid%
-    }
+    ; Activate the original window
+    WinActivate ahk_id %winid%
 }
 
 ; Remove all non-alphanumeric characters from input string while preserving spaces
