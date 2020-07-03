@@ -1,3 +1,5 @@
+#NoEnv
+#MaxThreads, 2
 #Include gdip.ahk
 #SingleInstance, force
 SetTitleMatchMode, 2
@@ -15,6 +17,9 @@ Menu, Tray, Add, Exit
 ; Create the main hotkey
 Hotkey, %shortcut%, start
 
+; Create a gdip instance used for image processing
+pToken := Gdip_StartUp()
+
 ; Function to restart the script, bound to the 'Restart' tray button
 Restart()
 {
@@ -30,11 +35,6 @@ Exit()
 ; Called to start a search
 start()
 {
-    global pToken
-
-    ; Create a gdip instance used for image processing
-    pToken := Gdip_StartUp()
-
     ; Save the active window so we can restore it later
     WinGet, winid, , A
 
@@ -50,9 +50,6 @@ start()
     ; Destroy the gui window
     Gui, Destroy
 
-    ; Kill the gdip instance
-    Gdip_Shutdown(pToken)
-
     ; If the search was not cancelled
     if (not ih.EndKey == "Escape")
     {
@@ -62,7 +59,6 @@ start()
 
 displayImage(ih)
 {
-    global pToken
     global transparency
 
     path := findMatch(ih.Input)
@@ -175,13 +171,11 @@ sendImage(img, winid)
     if (!ErrorLevel) 
     {
         ; Copy the image to the clipboard
-        pToken := Gdip_Startup()
         Gdip_SetBitmapToClipboard(pBitmap := Gdip_CreateBitmapFromFile(img))
         Gdip_DisposeImage(pBitmap)
-        Gdip_Shutdown(pToken)
             
         ; Paste image and send
-        Send, ^v{ENTER}  
+        Send, ^v{ENTER}
         Sleep, 100
 
         ; Restore the original clipboard
