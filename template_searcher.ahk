@@ -15,20 +15,26 @@ Menu, Tray, Add, Exit
 ; Create the main hotkey
 Hotkey, %shortcut%, start
 
-; Restart the script
+; Function to restart the script, bound to the 'Restart' tray button
 Restart()
 {
     Reload
 }
 
-; Exit the script
+; Function to exit the script, bound to the 'Exit' tray button
 Exit()
 {
     ExitApp
 }
 
+; Called to start a search
 start()
 {
+    global pToken
+
+    ; Create a gdip instance used for image processing
+    pToken := Gdip_StartUp()
+
     ; Save the active window so we can restore it later
     WinGet, winid, , A
 
@@ -37,9 +43,15 @@ start()
     ih.KeyOpt("{All}", "N")
     ih.OnKeyDown := Func("displayImage")
     ih.Start()
+    
     ; Wait for one of the termination keys to be pressed (enter or escape)
     ih.Wait()
+
+    ; Destroy the gui window
     Gui, Destroy
+
+    ; Kill the gdip instance
+    Gdip_Shutdown(pToken)
 
     ; If the search was not cancelled
     if (not ih.EndKey == "Escape")
@@ -50,13 +62,14 @@ start()
 
 displayImage(ih)
 {
+    global pToken
+    global transparency
+
     path := findMatch(ih.Input)
 
     ; Get the dimensions of the matched image
-    pToken := Gdip_StartUp()
     Gdip_GetImageDimensions(pBitmap := Gdip_CreateBitmapFromFile(path), w, h)
     Gdip_DisposeImage(pBitmap)
-    Gdip_ShutDown(pToken)
 
     ; Display the image on the user's screen
     Gui, Destroy
@@ -64,10 +77,11 @@ displayImage(ih)
     Gui, Add, Picture, x0 y0 w%w% h%h%, %path%
     WinSet, Top
     WinSet, ExStyle, ^0x20
-    WinSet, Transparent, 150
+    WinSet, Transparent, %transparency%
     Gui, Show, w%w% h%h%
 }
 
+; Will return the closest match to a string from the filenames in %path%
 findMatch(searchStr)
 {
     global path
@@ -87,7 +101,6 @@ findMatch(searchStr)
 
     searchStr := cleanse(searchStr)
     words := StrSplit(searchStr, " ")
-    match := ""
 
     ; Load the files into an array
     files := []
