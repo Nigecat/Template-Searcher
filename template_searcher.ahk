@@ -72,15 +72,17 @@ findMatch(searchStr)
 {
     global path
 
-    ; Detect whether the search str ends in a number and if not default to a match level of 1
-    if (RegexMatch(SubStr(searchStr, 0, 1), "[^0-9]")) 
+    ; Extract any digits at the end of the search string to serve as the match level
+    RegExMatch(searchStr, "\d+$", matchLevel)
+    ; If the string does not end in digits then default the match level to 1
+    if !matchLevel
     {
         matchLevel := 1
-    } 
-    else 
+    }
+    ; If digits were found then remove them from the original search string
+    else
     {
-        matchLevel := SubStr(searchStr, 0, 1) 
-        StringTrimRight, searchStr, searchStr, 1    ; remove the extra character
+        searchStr := RegExReplace(searchStr, "\d+$", "")
     }
 
     searchStr := cleanse(searchStr)
