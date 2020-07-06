@@ -20,6 +20,9 @@ Hotkey, %shortcut%, start
 ; Create a gdip instance used for image processing
 pToken := Gdip_StartUp()
 
+; Create a variable to store a temporary cache of the files in the search dir
+files := []
+
 ; Function to restart the script, bound to the 'Restart' tray button
 Restart()
 {
@@ -35,6 +38,15 @@ Exit()
 ; Called to start a search
 start()
 {
+    global path
+    global files
+    ; Load the files into an array
+    files := []
+    Loop, Files, %path%\*.*, R 
+    {
+        files[A_Index] := [A_LoopFileName, A_LoopFileFullPath]
+    }
+
     ; Save the active window so we can restore it later
     WinGet, winid, , A
 
@@ -80,7 +92,7 @@ displayImage(ih)
 ; Will return the closest match to a string from the filenames in %path%
 findMatch(searchStr)
 {
-    global path
+    global files
 
     ; Extract any digits at the end of the search string to serve as the match level
     RegExMatch(searchStr, "\d+$", matchLevel)
@@ -97,13 +109,6 @@ findMatch(searchStr)
 
     searchStr := cleanse(searchStr)
     words := StrSplit(searchStr, " ")
-
-    ; Load the files into an array
-    files := []
-    Loop, Files, %path%\*.*, R 
-    {
-        files[A_Index] := [A_LoopFileName, A_LoopFileFullPath]
-    }
 
     ; Check if a file starts with the search string
     match := matchLevel
