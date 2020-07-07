@@ -177,7 +177,7 @@ sendImage(img, winid)
         
     ; Paste image and send
     Send, ^v{ENTER}
-    Sleep, 25
+    Sleep, 100
 
     ; Restore the original clipboard
     Clipboard := clip
