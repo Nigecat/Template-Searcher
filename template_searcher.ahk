@@ -175,6 +175,8 @@ sendImage(img, winid)
     Gdip_SetBitmapToClipboard(pBitmap := Gdip_CreateBitmapFromFile(img))
     Gdip_DisposeImage(pBitmap)
         
+    Sleep, 25
+
     ; Paste image and send
     Send, ^v{ENTER}
     Sleep, 25
