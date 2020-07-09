@@ -75,18 +75,34 @@ displayImage(ih)
 
     path := findMatch(ih.Input)
 
-    ; Get the dimensions of the matched image
-    Gdip_GetImageDimensions(pBitmap := Gdip_CreateBitmapFromFile(path), w, h)
-    Gdip_DisposeImage(pBitmap)
+    ; Get the file extension of the matched file
+    SplitPath, path, fileName,, ext
 
-    ; Display the image on the user's screen
     Gui, Destroy
     Gui, +LastFound +AlwaysOnTop -Caption
-    Gui, Add, Picture, x0 y0 w%w% h%h%, %path%
-    WinSet, Top
-    WinSet, ExStyle, ^0x20
-    WinSet, Transparent, %transparency%
-    Gui, Show, w%w% h%h%
+
+    ; If the file is a text file display the text in it
+    if ext = txt
+    {
+        FileRead, content, %path%
+        content = %fileName%:`r%content%
+        Gui, Add, text, Content, %content%
+        Gui, Show, AutoSize
+    }
+    ; Otherwise assume it is an image
+    else
+    {
+        ; Get the dimensions of the matched image
+        Gdip_GetImageDimensions(pBitmap := Gdip_CreateBitmapFromFile(path), w, h)
+        Gdip_DisposeImage(pBitmap)
+
+        ; Display the image on the user's screen
+        Gui, Add, Picture, x0 y0 w%w% h%h%, %path%
+        WinSet, Top
+        WinSet, ExStyle, ^0x20
+        WinSet, Transparent, %transparency%
+        Gui, Show, w%w% h%h%
+    }
 }
 
 ; Will return the closest match to a string from the filenames in %path%
@@ -171,10 +187,23 @@ sendImage(img, winid)
     ; Make discord the active window
     WinActivate, Discord
 
-    ; Copy the image to the clipboard
-    Gdip_SetBitmapToClipboard(pBitmap := Gdip_CreateBitmapFromFile(img))
-    Gdip_DisposeImage(pBitmap)
-        
+    ; Get the file extension of the matched file
+    SplitPath, img, fileName,, ext
+
+    ; If the file is a text file copy the contents of it to the clipboard
+    if ext = txt
+    {
+        FileRead, content, %img%
+        Clipboard := content
+    }
+    ; Otherwise assume it is an image
+    else
+    {
+        ; Copy the image to the clipboard
+        Gdip_SetBitmapToClipboard(pBitmap := Gdip_CreateBitmapFromFile(img))
+        Gdip_DisposeImage(pBitmap)
+    }
+
     Sleep, 25
 
     ; Paste image and send
