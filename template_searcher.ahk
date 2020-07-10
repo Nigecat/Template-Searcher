@@ -179,7 +179,7 @@ findMatch(searchStr)
     
 }
 
-sendImage(img, winid)
+sendImage(file, winid)
 {
     ; Temporarily save clipboard contents
     clip := ClipboardAll
@@ -188,26 +188,48 @@ sendImage(img, winid)
     WinActivate, Discord
 
     ; Get the file extension of the matched file
-    SplitPath, img, fileName,, ext
+    SplitPath, file, fileName,, ext
 
     ; If the file is a text file copy the contents of it to the clipboard
     if ext = txt
     {
-        FileRead, content, %img%
-        Clipboard := content
+        FileRead, content, %file%
+        ; If there are more than 2000 characters in the file,
+        ; then we send it differently since discord has a max message limit of 2000 characters
+        if StrLen(content) > 2000
+        {
+            ; The contents of the file will be split on each newline then sent as chunks
+            content := StrSplit(content, "`n")
+            for i in content
+            {
+                Clipboard := content[i]
+                ; Paste text and send
+                Sleep, 25
+                Send, ^v{ENTER}
+                Sleep, 100
+            }
+        }
+        else
+        {
+            Clipboard := content
+            ; Paste text and send
+            Sleep, 25
+            Send, ^v{ENTER}
+            Sleep, 100
+        }
     }
     ; Otherwise assume it is an image
     else
     {
         ; Copy the image to the clipboard
-        Gdip_SetBitmapToClipboard(pBitmap := Gdip_CreateBitmapFromFile(img))
+        Gdip_SetBitmapToClipboard(pBitmap := Gdip_CreateBitmapFromFile(file))
         Gdip_DisposeImage(pBitmap)
-    }
 
-    ; Paste image and send
-    Sleep, 25
-    Send, ^v{ENTER}
-    Sleep, 100
+        ; Paste image and send
+        Sleep, 25
+        Send, ^v{ENTER}
+        Sleep, 100
+    }
 
     ; Restore the original clipboard
     Clipboard := clip
