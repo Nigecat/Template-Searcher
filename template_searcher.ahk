@@ -193,25 +193,39 @@ sendImage(file, winid)
     ; If the file is a text file copy the contents of it to the clipboard
     if ext = txt
     {
-        FileRead, content, %file%
-        ; If there are more than 2000 characters in the file,
-        ; then we send it differently since discord has a max message limit of 2000 characters
-        if StrLen(content) > 2000
+        FileRead, raw, %file%
+
+        ; The contents of the file will be split every 2000 characters then sent as seperate messages
+        ;   since discord has a max message limit of 2000 characters
+        content := [""]
+
+        ; Loop through each character of the file
+        ;  (each character will be automatically added to the end of the 'content' array)
+        Loop, Parse, raw 
         {
-            ; The contents of the file will be split on each newline then sent as chunks
-            content := StrSplit(content, "`n")
-            for i in content
+            ; If we have reached the message limit of 2000 characters then add a new element to the content array
+            if (StrLen(content[content.MaxIndex()]) >= 2000)
             {
-                Clipboard := content[i]
-                ; Paste text and send
-                Sleep, 25
-                Send, ^v{ENTER}
-                Sleep, 100
+                content.Push("")
+                content[content.MaxIndex()] .= A_LoopField
+            }
+            ; Splitting mid sentence can be quite destructive, 
+            ;   so once we reach 1500 characters we begin looking for a sentence break 
+            ;   and split on the first fullstop we find
+            else if (StrLen(content[content.MaxIndex()]) >= 1500 and A_LoopField == ".")
+            {
+                content[content.MaxIndex()] .= A_LoopField
+                content.Push("")
+            }
+            else
+            {
+                content[content.MaxIndex()] .= A_LoopField
             }
         }
-        else
+
+        for i in content
         {
-            Clipboard := content
+            Clipboard := content[i]
             ; Paste text and send
             Sleep, 25
             Send, ^v{ENTER}
