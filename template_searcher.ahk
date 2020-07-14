@@ -2,7 +2,23 @@
 #MaxThreads, 2
 #Include gdip.ahk
 #SingleInstance, force
+
+; Optimisations
+;   See: https://www.autohotkey.com/boards/viewtopic.php?t=6413
+#KeyHistory, 0                  
+#HotkeyInterval, 99000000        
+#MaxHotkeysPerInterval, 99000000
+SendMode Input
+SetWinDelay, -1
+SetMouseDelay, -1
+SetBatchLines, -1
+SetKeyDelay, -1, -1
+SetControlDelay, -1
 SetTitleMatchMode, 2
+Process, Priority, , A
+SetDefaultMouseSpeed, 0
+
+
 
 ; Read the config file
 IniRead, shortcut, config.ini, Config, shortcut
