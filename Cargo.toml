@@ -5,3 +5,5 @@ authors = ["Nigecat"]
 edition = "2018"
 
 [dependencies]
+confy = "0.4.0"
+serde = { version = "1.0.115", features = ["derive"] }
