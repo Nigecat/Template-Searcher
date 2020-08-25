@@ -44,7 +44,7 @@ fn main() {
         // Convert the last character of the shortcut string to an ascii key code
         shortcut.chars().last().unwrap().to_ascii_uppercase() as u32,
         || {
-            searcher::start_search(config::get("path"));
+            searcher::start_search();
         }
     ).expect("could not create hotkey");
     listener.listen();
