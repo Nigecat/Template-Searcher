@@ -12,19 +12,23 @@ impl ::std::default::Default for Config {
 
 pub fn get(key: &str) -> String {
     let cfg: Config = confy::load(crate::NAME).unwrap();
-    return match key {
-        "path" => cfg.path,
-        "shortcut" => cfg.shortcut,
-        _ => panic!("unknown field"),
+    if key == "path" {
+        return cfg.path;
+    } else if key == "shortcut" {
+        return cfg.shortcut;
+    } else {
+        panic!("unknown field");
     }
 }
 
-pub fn set(key: &str, val: &str) -> () {
+pub fn set(key: &str, val: String) -> () {
     let mut cfg: Config = confy::load(crate::NAME).unwrap();
-    match key {
-        "path" => cfg.path = val.to_string(),
-        "shortcut" => cfg.shortcut = val.to_string(),
-        _ => panic!("unknown field"),
+    if key == "path" {
+        cfg.path = val;
+    } else if key == "shortcut" {
+        cfg.shortcut = val;
+    } else {
+        panic!("unknown field");
     }
     confy::store(crate::NAME, cfg).unwrap();
 }
