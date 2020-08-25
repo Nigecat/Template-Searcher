@@ -9,10 +9,12 @@
 <script>
     function init() {
         external.invoke("init");
+        console.log(window.searchDir);
     }
-    function setup(path) {
-        window.searchPath = path;
-    }
+
+   // document.addEventListener("keydown", (event) => {
+   //     external.invoke(event.key);
+   // });
 </script>
 
 </html>
