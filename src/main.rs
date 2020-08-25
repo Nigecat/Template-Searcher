@@ -1,5 +1,6 @@
 use std::env;
 mod config;
+mod searcher;
 
 const NAME: &str = "Template Searcher";
 
@@ -26,4 +27,25 @@ fn parse_args() -> () {
 
 fn main() {
     parse_args();
+
+    let shortcut = config::get("shortcut");
+
+    // Calculate our modifiers
+    let mut modifiers = 0;
+    if shortcut.contains("control") { modifiers += hotkey::modifiers::CONTROL; }
+    if shortcut.contains("shift") { modifiers += hotkey::modifiers::SHIFT; }
+    if shortcut.contains("windows") { modifiers += hotkey::modifiers::SUPER; }
+    if shortcut.contains("alt") { modifiers += hotkey::modifiers::ALT; }
+
+    // Register our hotkey
+    let mut listener = hotkey::Listener::new();
+    listener.register_hotkey(
+        modifiers,
+        // Convert the last character of the shortcut string to an ascii key code
+        shortcut.chars().last().unwrap().to_ascii_uppercase() as u32,
+        || {
+            searcher::start_search(config::get("path"));
+        }
+    ).expect("could not create hotkey");
+    listener.listen();
 }
