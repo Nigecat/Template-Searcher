@@ -1,6 +1,6 @@
 [package]
 name = "template_searcher"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Nigecat"]
 edition = "2018"
 
@@ -13,3 +13,8 @@ serde = { version = "1.0.115", features = ["derive"] }
 
 [target.'cfg(windows)'.build-dependencies]
 winres = "0.1"
+
+[package.metadata.winres]
+OriginalFilename = "Template Searcher.exe"
+ProductName = "Template Searcher"
+FileDescription = "Discord Template Searcher"
