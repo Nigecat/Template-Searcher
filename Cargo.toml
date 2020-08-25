@@ -10,6 +10,7 @@ glob = "0.3.0"
 confy = "0.4.0"
 hotkey = "0.3.1"
 web-view = "0.6.3"
+snailquote = "0.3.0"
 lazy_static = "1.4.0"
 serde = { version = "1.0.115", features = ["derive"] }
 

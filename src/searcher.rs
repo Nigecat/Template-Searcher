@@ -1,4 +1,5 @@
 use web_view::*;
+use snailquote::{escape};
 
 static mut SEARCH: String = String::new();
 
@@ -7,7 +8,7 @@ pub fn start_search() {
 
     web_view::builder()
         .title(crate::NAME)
-        .content(Content::Html(include_str!("display.html")))
+        .content(Content::Html(r#"<!DOCTYPE html><html onkeydown="onKey()"><body onload="external.invoke('init')"></body><script> function onKey(key) { external.invoke("key-" + event.key) } </script></html>"#))
         .size(852, 480)
         .resizable(false)
         .frameless(true)
@@ -56,7 +57,10 @@ fn invoke_handler(webview: &mut WebView<()>, arg: &str) -> WVResult {
                 SEARCH.push(arg.chars().last().unwrap());
             }
 
-            println!("{}   ------   {}", SEARCH, crate::matcher::get_match(SEARCH.clone(), crate::config::get("path")));
+            // Update the preview
+            let file = crate::matcher::get_match(SEARCH.clone(), crate::config::get("path"));
+            webview.eval(&format!(r#"document.body.innerHTML = '<img src={}>'"#, escape(&file))[..]).ok();
+            println!("{}   ------   {}", SEARCH, file);
         }
     
         else if arg == "exit" {
