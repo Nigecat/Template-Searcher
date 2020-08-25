@@ -23,8 +23,8 @@ fn invoke_handler(webview: &mut WebView<()>, arg: &str) -> WVResult {
         println!("recieved arg: {}", arg);
     
         if arg == "init" {
-           webview.set_fullscreen(true);
-           webview.eval("document.body.focus()").ok();
+            webview.set_fullscreen(true);
+            webview.eval("document.body.focus()").ok();
         }
     
         else if arg.starts_with("key-") {

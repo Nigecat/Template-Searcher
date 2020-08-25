@@ -3,6 +3,7 @@ use std::thread;
 mod config;
 mod searcher;
 mod matcher;
+mod tray;
 
 const NAME: &str = "Template Searcher";
 
@@ -29,6 +30,11 @@ fn parse_args() -> () {
 
 fn main() {
     parse_args();
+
+    // Create our tray in a seperate thread
+    thread::spawn(|| {
+        tray::create_tray().unwrap();
+    });
 
     let shortcut = config::get("shortcut");
 
