@@ -6,7 +6,7 @@ fn main() {
 
     // Delete the old content if it exists
     if Path::new("src/display.rs").exists() {
-        fs::remove_file("src/display.rs");
+        fs::remove_file("src/display.rs").expect("unable to clear old html content");
     }
 
     // Read the html content and add quotes to either side
