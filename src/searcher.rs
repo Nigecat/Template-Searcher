@@ -5,7 +5,7 @@ pub fn start_search(path: String) -> () {
     
     web_view::builder()
         .title(crate::NAME)
-        .content(Content::Html(include!("display.rs")))
+        .content(Content::Html(include_str!("display.html")))
         .size(852, 480)
         .resizable(false)
         .debug(true)
