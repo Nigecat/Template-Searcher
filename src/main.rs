@@ -2,6 +2,7 @@ use std::env;
 use std::thread;
 mod config;
 mod searcher;
+mod matcher;
 
 const NAME: &str = "Template Searcher";
 

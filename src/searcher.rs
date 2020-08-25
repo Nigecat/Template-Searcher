@@ -55,13 +55,13 @@ fn invoke_handler(webview: &mut WebView<()>, arg: &str) -> WVResult {
             else if arg.chars().count() == 5 {
                 SEARCH.push(arg.chars().last().unwrap());
             }
+
+            println!("{}   ------   {}", SEARCH, crate::matcher::get_match(SEARCH.clone(), crate::config::get("path")));
         }
     
         else if arg == "exit" {
             webview.exit();
         }
-
-        println!("current search: {}", SEARCH);
     
         Ok(())
     }
