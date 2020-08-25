@@ -10,7 +10,7 @@ pub fn start_search() {
         .content(Content::Html(include_str!("display.html")))
         .size(852, 480)
         .resizable(false)
-       // .frameless(true)
+        .frameless(true)
         .user_data(())
         .invoke_handler(invoke_handler)
         .run()
@@ -22,7 +22,7 @@ fn invoke_handler(webview: &mut WebView<()>, arg: &str) -> WVResult {
         println!("recieved arg: {}", arg);
     
         if arg == "init" {
-           // webview.set_fullscreen(true);
+           webview.set_fullscreen(true);
            webview.eval("document.body.focus()").ok();
         }
     
