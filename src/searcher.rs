@@ -1,5 +1,4 @@
 use web_view::*;
-use snailquote::escape;
 
 pub fn start_search() -> () {
     println!("starting search");
@@ -20,7 +19,6 @@ fn invoke_handler(webview: &mut WebView<()>, arg: &str) -> WVResult {
     println!("recieved arg: {}", arg);
 
     if arg == "init" {
-        webview.eval(&format!("window.searchDir = {}", escape(&crate::config::get("path")))).expect("unable to init window");
         webview.set_fullscreen(true);
     }
 

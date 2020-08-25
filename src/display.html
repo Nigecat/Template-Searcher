@@ -2,19 +2,14 @@
 
 <html>
     
-<body onload="init()">
-    <h1>Hello, World!</h1>
+<body onkeydown="onKey()" onload="external.invoke('init')">
+    <h1 >Hello, World!</h1>
 </body>
 
 <script>
-    function init() {
-        external.invoke("init");
-        console.log(window.searchDir);
-    }
-
-   // document.addEventListener("keydown", (event) => {
-   //     external.invoke(event.key);
-   // });
+function onKey(key) {
+    external.invoke(event.key);
+}
 </script>
 
 </html>
