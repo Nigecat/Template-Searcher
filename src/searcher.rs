@@ -1,6 +1,8 @@
 use web_view::*;
 
-pub fn start_search() -> () {
+static mut SEARCH: String = String::new();
+
+pub fn start_search() {
     println!("starting search");
 
     web_view::builder()
@@ -16,16 +18,51 @@ pub fn start_search() -> () {
 }
 
 fn invoke_handler(webview: &mut WebView<()>, arg: &str) -> WVResult {
-    println!("recieved arg: {}", arg);
+    unsafe {
+        println!("recieved arg: {}", arg);
+    
+        if arg == "init" {
+           // webview.set_fullscreen(true);
+           webview.eval("document.body.focus()").ok();
+        }
+    
+        else if arg.starts_with("key-") {
+            if arg == "key-Spacebar" {
+                SEARCH.push(' ');
+            }
+            
+            else if arg == "key-Backspace" {
+                // Only remove a character if we have any characters
+                if SEARCH.chars().count() > 0 {
+                    // Slice all the characters except the last one
+                    SEARCH = SEARCH[..SEARCH.chars().count() - 1].to_string();
+                }
+            } 
 
-    if arg == "init" {
-       // webview.set_fullscreen(true);
-       webview.eval("document.body.focus()").ok();
+            // Cancel the search
+            else if arg == "key-Esc" {
+                webview.exit();
+            }
+
+            // Send the current match
+            else if arg == "key-Enter" {
+                println!("sending search: {}", SEARCH);
+                webview.exit();
+            }
+            
+            // Only add it to our search if we have exactly 5 characters
+            // This will ignore any other control characters like shift
+            else if arg.chars().count() == 5 {
+                SEARCH.push(arg.chars().last().unwrap());
+            }
+        }
+    
+        else if arg == "exit" {
+            webview.exit();
+        }
+
+        println!("current search: {}", SEARCH);
+    
+        Ok(())
     }
-
-    else if arg == "exit" {
-        webview.exit();
-    }
-
-    Ok(())
 }

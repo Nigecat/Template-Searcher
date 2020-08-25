@@ -1,4 +1,5 @@
 use std::env;
+use std::thread;
 mod config;
 mod searcher;
 
@@ -38,14 +39,16 @@ fn main() {
     if shortcut.contains("alt") { modifiers += hotkey::modifiers::ALT; }
 
     // Register our hotkey
-    let mut listener = hotkey::Listener::new();
-    listener.register_hotkey(
+    let mut hk = hotkey::Listener::new();
+    hk.register_hotkey(
         modifiers,
         // Convert the last character of the shortcut string to an ascii key code
         shortcut.chars().last().unwrap().to_ascii_uppercase() as u32,
         || {
-            searcher::start_search();
-        }
+            thread::spawn(|| {
+                searcher::start_search();
+            });
+        },
     ).expect("could not create hotkey");
-    listener.listen();
+    hk.listen();
 }
