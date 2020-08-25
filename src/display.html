@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 
 <html>
-
-<body>
+    
+<body onload="init()">
     <h1>Hello, World!</h1>
 </body>
+
+<script>
+    function init() {
+        external.invoke("init");
+    }
+</script>
 
 </html>
