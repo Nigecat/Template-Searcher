@@ -1,1 +1,25 @@
 icon ICON "resources/icon.ico"
+
+1 VERSIONINFO
+FILEVERSION     1,0,0,0
+PRODUCTVERSION  1,0,0,0
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080904E4"
+        BEGIN
+        VALUE "CompanyName", "Nigecat"
+        VALUE "FileDescription", "Discord Template Searcher"
+        VALUE "FileVersion", "1.0"
+        VALUE "InternalName", "Template Searcher"
+        VALUE "LegalCopyright", "Nigecat"
+        VALUE "OriginalFilename", "Template Searcher.exe"
+        VALUE "ProductName", "Template Searcher"
+        VALUE "ProductVersion", "1.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x809, 1252
+    END
+END
