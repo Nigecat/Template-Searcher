@@ -1,0 +1,7 @@
+[package]
+name = "template_searcher"
+version = "0.1.0"
+authors = ["Nigecat"]
+edition = "2018"
+
+[dependencies]
