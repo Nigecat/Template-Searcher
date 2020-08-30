@@ -5,7 +5,16 @@ authors = ["Nigecat"]
 edition = "2018"
 
 [dependencies]
+imagesize = "0.8.8"
 orbtk = "0.3.1-alpha3"
+
+[target.'cfg(windows)'.build-dependencies]
+winres = "0.1"
+
+[package.metadata.winres]
+OriginalFilename = "Template Searcher.exe"
+ProductName = "Template Searcher"
+FileDescription = "Discord Template Searcher"
 
 [profile.release]
 lto = true
