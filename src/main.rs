@@ -3,6 +3,6 @@ use window::Window;
 
 fn main() {
     let win = Window::new();
-    win.display();
+    win.display("resources/banner.png".to_string());
     win.destroy();
 }
