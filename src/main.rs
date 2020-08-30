@@ -1,3 +1,5 @@
+mod window;
+
 fn main() {
-    println!("Hello, world!");
+    window::show_image("K:\\Meme Formats\\add to cart.png");
 }
