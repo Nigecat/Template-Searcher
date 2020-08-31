@@ -1,0 +1,18 @@
+[package]
+name = "template_searcher"
+version = "0.1.0"
+authors = ["Nigecat"]
+edition = "2018"
+
+[dependencies]
+
+[build-dependencies]
+winres = "0.1"
+
+[package.metadata.winres]
+OriginalFilename = "Template Searcher.exe"
+ProductName = "Template Searcher"
+FileDescription = "Discord Template Searcher"
+
+[profile.release]
+lto = true
