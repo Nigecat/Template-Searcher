@@ -1,3 +1,9 @@
+extern {
+    fn create_window();
+}
+
 fn main() {
-    println!("Hello, world!");
+    unsafe {
+        create_window();
+    }
 }
