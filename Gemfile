@@ -4,6 +4,6 @@ source "https://rubygems.org"
 
 git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
-# gem "rails"
+gem "ruby2d", "~> 0.9.4"
 
-gem "fxruby", "~> 1.6"
+gem "fastimage", "~> 2.2"
