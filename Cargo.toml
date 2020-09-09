@@ -5,3 +5,4 @@ authors = ["Nigecat"]
 edition = "2018"
 
 [dependencies]
+iced = { version = "0.1", features = ["image"] }
