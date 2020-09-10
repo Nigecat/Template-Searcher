@@ -14,7 +14,7 @@ impl Application for Display {
     type Message = ();
     type Flags = String;
 
-    fn new(_flags: String) -> (Display, Command<Self::Message>) {
+    fn new(_flags: Self::Flags) -> (Display, Command<Self::Message>) {
         (Display { path: _flags }, Command::none())
     }
 
