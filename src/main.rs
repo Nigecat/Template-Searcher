@@ -39,6 +39,8 @@ fn main() {
     
     let pb = ProgressBar::new(SUBREDDITS.len() as u64);
     for subreddit in SUBREDDITS {
+        pb.inc(1);
+
         let url = format!("https://www.reddit.com/r/{}/hot.json?limit={}", subreddit, LIMIT); 
         let resp = reqwest::blocking::get(&url).unwrap().json::<Value>().unwrap();
 
@@ -48,9 +50,7 @@ fn main() {
             if val != Value::Null {
                 posts.push(val);
             }
-        }
-
-        pb.inc(1);
+        }    
     }
     pb.finish_and_clear();
 
